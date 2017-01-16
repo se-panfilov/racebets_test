@@ -13,11 +13,11 @@
       <div class="subtitle__info"></div>
       <div class="subtitle__info--img"></div>
     </div>
-    <div class="race-block__info">
-      <div class="info__cell -img"></div>
-      <div class="info__cell"></div>
-      <div class="info__cell -btn"></div>
-    </div>
+    <ul class="race-block__runners">
+      <li class="runners__cell -img"></li>
+      <li class="runners__cell"></li>
+      <li class="runners__cell"></li>
+    </ul>
     <button @click="debug">Debug</button>
     <span v-text="selectedRaces.length"></span>
   </div>
