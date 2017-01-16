@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <filters v-on:change-filters="onChangeFilters"></filters>
-    <next-race filters="raceFilters"></next-race>
+    <next-race :filter-obj="raceFilters"></next-race>
   </div>
 </template>
 

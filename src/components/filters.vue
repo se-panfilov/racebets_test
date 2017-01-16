@@ -2,19 +2,19 @@
   <div class='filter-block'>
     <label> Trot
       <input type="checkbox"
-             v-model="filters.trot"
+             v-model="filters.T"
              v-on:change="changeFilter"
       />
     </label>
     <label> Gallop
       <input type="checkbox"
-             v-model="filters.gallop"
+             v-model="filters.G"
              v-on:change="changeFilter"
       />
     </label>
     <label> Dogs
       <input type="checkbox"
-             v-model="filters.dogs"
+             v-model="filters.D"
              v-on:change="changeFilter"
       />
     </label>
@@ -22,7 +22,7 @@
       <input type="checkbox"
              id="jumping"
              name="jumping"
-             v-model="filters.jumping"
+             v-model="filters.J"
              v-on:change="changeFilter"
       />
     </label>
@@ -35,12 +35,15 @@
     data () {
       return {
         filters: {
-          trot: true,
-          gallop: true,
-          dogs: false,
-          jumping: true
+          T: true,
+          G: true,
+          D: false,
+          J: true
         }
       }
+    },
+    mounted () {
+      this.$emit('change-filters', this.filters)
     },
     methods: {
       changeFilter () {

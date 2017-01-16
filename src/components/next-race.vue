@@ -4,8 +4,11 @@
       <div class="title__info -heavy"></div>
       <div class="title__info -right"></div>
     </div>
-    <div class="race-block__subtitle">
-      <div class="subtitle__info"></div>
+    <div class="race-block__subtitle" v-for="r in selectedRaces">
+      <div class="subtitle__info">
+        <span v-text="r.race_type"></span>
+        <span v-text="r.purse.amount"></span>
+      </div>
       <div class="subtitle__info"></div>
       <div class="subtitle__info"></div>
       <div class="subtitle__info--img"></div>
@@ -15,6 +18,8 @@
       <div class="info__cell"></div>
       <div class="info__cell -btn"></div>
     </div>
+    <button @click="debug">Debug</button>
+    <span v-text="selectedRaces.length"></span>
   </div>
 </template>
 
@@ -25,16 +30,30 @@
     name: 'NextRace',
     data () {
       return {
+        races: NextRaceData.data.races
       }
     },
     props: {
-      filter: {
-        type: String
+      filterObj: {
+        type: Object,
+        required: true
       }
     },
     methods: {
-      some (some) {
-
+      debug () {
+//        console.info(this.races)
+//        console.log(this.selectedRaces)
+      }
+    },
+    computed: {
+      selectedRaces () {
+        const arr = this.races
+        const filters = Object.keys(this.filterObj).filter(v => {
+          return this.filterObj[v] === true
+        })
+        return arr.filter(v => {
+          return filters.includes(v.race_type)
+        })
       }
     },
     components: {
