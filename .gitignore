@@ -5,3 +5,13 @@ npm-debug.log
 test/unit/coverage
 test/e2e/reports
 selenium-debug.log
+idea/
+*.log
+.idea/inspectionProfiles/
+.idea/jsLibraryMappings.xml
+.idea/misc.xml
+.idea/workspace.xml
+.nvmrc
+betsson-test/
+docs/
+yarn.lock
