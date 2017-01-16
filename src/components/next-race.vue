@@ -19,6 +19,8 @@
 </template>
 
 <script>
+  import NextRaceData from './next_races_data'
+
   export default {
     name: 'NextRace',
     data () {
@@ -32,26 +34,11 @@
     },
     methods: {
       some (some) {
+
       }
     },
-//    computed: {
-//      filteredGames () {
-//        return this.games
-//          .filter(v => {
-//            if (!this.category) return true
-//            return v.gameType === this.category
-//          })
-//          .filter(v => {
-//            if (!this.vendor) return true
-//            return v.vendor === this.vendor
-//          })
-//          .filter(v => {
-//            if (!this.text && this.text.length === 0) return true
-//            return v.name.toLowerCase().indexOf(this.text.toLowerCase()) !== -1
-//          })
-//      }
-//    },
     components: {
+      NextRaceData
     }
   }
 </script>

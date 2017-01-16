@@ -1,25 +1,29 @@
 <template>
   <div id="app">
-    Some
-    <next-race></next-race>
+    <filters v-on:change-filters="onChangeFilters"></filters>
+    <next-race filters="raceFilters"></next-race>
   </div>
 </template>
 
 <script>
+  import Filters from './components/filters'
   import NextRace from './components/next-race'
 
   export default {
     name: 'app',
     data () {
       return {
-        text: '',
-        category: null,
-        vendor: null
+        raceFilters: {}
       }
     },
-    methods: {},
+    methods: {
+      onChangeFilters (filters) {
+        this.raceFilters = filters
+      }
+    },
     components: {
-      NextRace
+      NextRace,
+      Filters
     }
   }
 </script>
