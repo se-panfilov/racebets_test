@@ -1,37 +1,35 @@
 <template>
   <div class='race-block'>
-    <div class="race-block__title title">
-      <div class="title__info -heavy"></div>
-      <div class="title__info -right"></div>
-      <span>Upcoming:</span>
-      <span v-text="upcomingRace.race_type"></span>
-      <span v-text="upcomingRace.purse.amount"></span>
-      <span v-text="upcomingRace.post_time"></span>
-      <div>-----</div>
+    <div class="race-block__title">
+      <span class="title__info">
+        <img v-bind:src="getFlagImg(nextRace.event.country)">
+      </span>
+      <span class="title__info -heavy" v-text="nextRace.event.title"></span>
+      <span class="title__info -right" v-text="getDue(nextRace.post_time)"></span>
     </div>
-    <div class="race-block__subtitle" v-for="race in selectedRaces">
+    <div class="race-block__subtitle">
       <div class="subtitle__info">
-        <span v-text="race.race_type"></span>
-        <span v-text="race.purse.amount"></span>
-        <span v-text="race.post_time"></span>
+        <span v-text="runnersCount"></span> Runners |
+        <span v-text="nextRace.distance"></span>m |
+        <span v-text="nextRace.purse.amount"></span>
+        <span v-text="nextRace.purse.currency"></span>
+        <img v-bind:src="getRaceTypeImg(nextRace.race_type)"/>
       </div>
       <div class="subtitle__info"></div>
       <div class="subtitle__info"></div>
       <div class="subtitle__info--img"></div>
-      <ul class="race-block__runners" v-for="runner in race.runners">
-        <li class="runners__cell" v-show="runner.silk">
-          <a v-bind:href="getSilkUrl(runner.id_race)">
-            <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk">
-          </a>
-        </li>
-        <li class="runners__cell" v-text="runner.name"></li>
-        <li class="runners__cell">
-          <button type="button" v-text="runner.odds" @click="onOddsClick()"></button>
-        </li>
-      </ul>
     </div>
-    <button @click="debug">Debug</button>
-    <span v-text="selectedRaces.length"></span>
+    <ul class="race-block__runners">
+      <li class="runners__item" v-for="runner in nextRace.runners">
+        <a v-bind:href="getSilkUrl(runner.id_race)" class="runners-item__cell" v-show="runner.silk">
+          <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk"/>
+        </a>
+        <span class="runners-item__cell" v-text="runner.name"></span>
+        <span class="runners-item__cell">
+          <button type="button" v-text="runner.odds" @click="onOddsClick()"></button>
+        </span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -59,11 +57,27 @@
       onOddsClick () {
 
       },
+      getDue (dt) {
+        const now = (new Date()).getTime()
+
+        if (dt <= now) return 'Due'
+        return parseInt((dt - now) / 1000 / 60)
+      },
       getSilkUrl (id) {
+        if (!id) return ''
         return `http://www.racebets.com/bet/${id}` // https?
       },
       getSilkImg (img) {
+        if (!img) return ''
         return `static/assets/silks/${img}`
+      },
+      getRaceTypeImg (type) {
+        if (!type) return ''
+        return `static/assets/race-types/race-type-${type}.svg`
+      },
+      getFlagImg (country) {
+        if (!country) return ''
+        return `static/assets/flags/${country.toLowerCase()}.png`
       }
     },
     computed: {
@@ -72,16 +86,21 @@
         const filters = Object.keys(this.filterObj).filter(v => {
           return this.filterObj[v] === true
         })
+
         return arr.filter(v => {
           return filters.includes(v.race_type)
         })
       },
-      upcomingRace () {
-        const sortedRaces = this.selectedRaces.sort((a, b) => a.post_time - b.post_time)
+      nextRace () {
+        const emptyRace = { purse: {}, event: {}, runners: {}, race_type: 'T', post_time: 0 }
 
-        return sortedRaces.length > 0 ? sortedRaces[0] : { purse: {} }
-//        return this.selectedRaces().sort((a, b) => a.post_time - b.post_time)
-//        return this.races().sort((a, b) => a.post_time - b.post_time)
+        if (!this.selectedRaces) return emptyRace
+        const sortedRaces = this.selectedRaces.sort((a, b) => a.purse.amount - b.purse.amount)
+        return sortedRaces.length > 0 ? sortedRaces[0] : emptyRace
+      },
+      runnersCount () {
+        if (!this.nextRace || !this.nextRace.runners) return 0
+        return this.nextRace.runners.length
       }
     },
     components: {
@@ -91,7 +110,48 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-  text_color = #464646
+  primary_color = #333333
+  bg_color = #FFF
+  text_color = #444
+  alt_text_color = #FFF
 
+  .race-block
+    font-weight 500px
+    font-size 0.8em
+    border 1px solid primary_color
+    border-radius 3px
+    background-color bg_color
+    &__title
+      background-color primary_color
+      color alt_text_color
+
+    .title
+      &__info
+        &.-heavy
+          font-weight bold
+        &.-right
+          float right
+
+    &__subtitle
+      background-color primary_color
+      color alt_text_color
+
+    &__runners
+      background-color bg_color
+      color text_color
+      overflow-y auto
+      margin 0
+      padding 0
+      .runners
+        &__item
+          display block
+          list-style none
+          margin 0
+          padding 8px 4px
+          border-top 1px solid text_color
+        .runners-item
+          &__cell
+            display inline-block
+            color red
 
 </style>
