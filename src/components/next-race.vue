@@ -19,11 +19,16 @@
     </div>
     <ul class="race-block__runners">
       <li class="runners__item" v-for="runner in nextRace.runners">
-        <a v-bind:href="getSilkUrl(runner.id_race)" class="runners-item__cell" v-show="runner.silk">
+        <a v-bind:href="getSilkUrl(runner.id_race)"
+           class="runners-item__cell -order1"
+           v-show="runner.silk"
+        >
           <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk" width="20" height="20"/>
         </a>
-        <span class="runners-item__cell" v-text="runner.name"></span>
-        <button type="button" class="runners-item__btn -right" v-text="runner.odds" @click="onOddsClick()"></button>
+        <span class="runners-item__cell -order2" v-text="runner.name"></span>
+        <span class="runners-item__cell -order3">
+          <button type="button" class="item-cell__btn" v-text="runner.odds" @click="onOddsClick()"></button>
+        </span>
       </li>
     </ul>
   </div>
@@ -147,7 +152,6 @@
       padding 4px 8px 8px 8px
       background-color primary_color
       color alt_text_color
-      //*border-top 1px solid #666
 
     .subtitle
       &__info
@@ -177,9 +181,10 @@
       overflow-y auto
       margin 0
       padding 0
+
       .runners
         &__item
-          display block
+          display flex
           list-style none
           margin 0
           padding 8px 4px
@@ -191,24 +196,31 @@
           .runners-item
             &__cell
               display inline-block
-              vertical-align middle
+              flex 1 0 33%
+              box-sizing border-box
               line-height 11px
               padding 3px
-              //.item-cell
-            &__btn
-              color text_color
-              background-color #f8ae17
-              background-image: linear-gradient(#ffdd86,#f8ae17)
-              border 1px solid #f8ae17
-              border-radius 3px
-              outline none
-              font-weight 400
-              min-width 36px
-              box-sizing border-box
-              cursor pointer
-              padding 2px 0
-              display inline-block
-              line-height 11px
-              &.-right
-                float right
+              &.-order1
+                order 1
+                flex 1 0 20%
+              &.-order2
+                order 2
+                flex 1 0 60%
+                padding 8px
+              &.-order3
+                order 3
+                flex 1 0 20%
+              .item-cell__btn
+                color text_color
+                background-color #f8ae17
+                background-image: linear-gradient(#ffdd86, #f8ae17)
+                border 1px solid #f8ae17
+                border-radius 3px
+                outline none
+                font-weight 400
+                min-width 36px
+                box-sizing border-box
+                cursor pointer
+                padding 2px 0
+                  line-height 11px
 </style>
