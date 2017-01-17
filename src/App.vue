@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <filters v-on:change-filters="onChangeFilters"></filters>
-    <next-race :filter-obj="raceFilters"></next-race>
+    <div class="column">
+      <next-race :filter-obj="raceFilters"></next-race>
+    </div>
   </div>
 </template>
 
@@ -29,6 +31,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
+
   html, body
     margin 0
     padding 0
@@ -39,7 +42,6 @@
     color #3c3c3c
     font-family 'Roboto', sans-serif
     font-weight 500
-    font-size 16px
     *
       font-family 'Roboto', sans-serif
       font-weight 500
@@ -55,5 +57,8 @@
   article, aside, details, figcaption, figure,
   footer, header, menu, nav, section, canvas
     display block
+
+  .column
+    width 240px
 
 </style>

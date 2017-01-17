@@ -13,7 +13,8 @@
         <span v-text="nextRace.distance"></span>m |
         <span v-text="nextRace.purse.amount"></span>
         <span v-text="nextRace.purse.currency"></span>
-        <img v-bind:src="getRaceTypeImg(nextRace.race_type)"/>
+        <!--<img v-bind:src="getRaceTypeImg(nextRace.race_type)"/>-->
+        <span class="subtitle__race-type -right" v-bind:class="raceTypeClassObj"></span>
       </div>
       <div class="subtitle__info"></div>
       <div class="subtitle__info"></div>
@@ -25,8 +26,8 @@
           <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk"/>
         </a>
         <span class="runners-item__cell" v-text="runner.name"></span>
-        <span class="runners-item__cell">
-          <button type="button" v-text="runner.odds" @click="onOddsClick()"></button>
+        <span class="runners-item__cell -right">
+          <button type="button" class="item-cell__btn" v-text="runner.odds" @click="onOddsClick()"></button>
         </span>
       </li>
     </ul>
@@ -71,10 +72,10 @@
         if (!img) return ''
         return `static/assets/silks/${img}`
       },
-      getRaceTypeImg (type) {
-        if (!type) return ''
-        return `static/assets/race-types/race-type-${type}.svg`
-      },
+//      getRaceTypeImg (type) {
+//        if (!type) return ''
+//        return `static/assets/race-types/race-type-${type}.svg`
+//      },
       getFlagImg (country) {
         if (!country) return ''
         return `static/assets/flags/${country.toLowerCase()}.png`
@@ -101,6 +102,14 @@
       runnersCount () {
         if (!this.nextRace || !this.nextRace.runners) return 0
         return this.nextRace.runners.length
+      },
+      raceTypeClassObj () {
+        return {
+          '-trot': this.nextRace.race_type === 'T',
+          '-gallop': this.nextRace.race_type === 'G',
+          '-jumping': this.nextRace.race_type === 'J',
+          '-dogs': this.nextRace.race_type === 'D'
+        }
       }
     },
     components: {
@@ -116,14 +125,17 @@
   alt_text_color = #FFF
 
   .race-block
-    font-weight 500px
+    font-weight normal
     font-size 0.8em
     border 1px solid primary_color
     border-radius 3px
     background-color bg_color
+    font-family Tahoma, Geneva, Kalimati, sans-serif
     &__title
       background-color primary_color
       color alt_text_color
+      padding 8px
+      font-size 11px
 
     .title
       &__info
@@ -133,8 +145,28 @@
           float right
 
     &__subtitle
+      padding 4px 8px 8px 8px
       background-color primary_color
       color alt_text_color
+
+    .subtitle
+      &__info
+        font-size 11px
+      &__race-type
+        background white
+        height 16px
+        width 27px
+        display inline-block
+        &.-trot
+          mask url('../../static/assets/race-types/race-type-T.svg') center / contain no-repeat
+        &.-dogs
+          mask url('../../static/assets/race-types/race-type-D.svg') center / contain no-repeat
+        &.-gallop
+          mask url('../../static/assets/race-types/race-type-G.svg') center / contain no-repeat
+        &.-jumping
+          mask url('../../static/assets/race-types/race-type-J.svg') center / contain no-repeat
+        &.-right
+          float right
 
     &__runners
       background-color bg_color
@@ -148,10 +180,16 @@
           list-style none
           margin 0
           padding 8px 4px
+          font-size 11px
           border-top 1px solid text_color
-        .runners-item
-          &__cell
-            display inline-block
-            color red
+
+          .runners-item
+            &__cell
+              display inline-block
+              &.-right
+                float right
+              .item-cell
+                &__btn
+                  color: red
 
 </style>
