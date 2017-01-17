@@ -30,7 +30,7 @@
   }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus">
 
   html, body
     margin 0
@@ -59,6 +59,6 @@
     display block
 
   .column
-    width 240px
+    width 214px
 
 </style>

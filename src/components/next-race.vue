@@ -2,9 +2,9 @@
   <div class='race-block'>
     <div class="race-block__title">
       <span class="title__info">
-        <img v-bind:src="getFlagImg(nextRace.event.country)">
+        <img v-bind:src="getFlagImg(nextRace.event.country)" width="14" height="11">
       </span>
-      <span class="title__info -heavy" v-text="nextRace.event.title"></span>
+      <span class="title__info -heavy -top" v-text="nextRace.event.title"></span>
       <span class="title__info -right" v-text="getDue(nextRace.post_time)"></span>
     </div>
     <div class="race-block__subtitle">
@@ -16,19 +16,14 @@
         <!--<img v-bind:src="getRaceTypeImg(nextRace.race_type)"/>-->
         <span class="subtitle__race-type -right" v-bind:class="raceTypeClassObj"></span>
       </div>
-      <div class="subtitle__info"></div>
-      <div class="subtitle__info"></div>
-      <div class="subtitle__info--img"></div>
     </div>
     <ul class="race-block__runners">
       <li class="runners__item" v-for="runner in nextRace.runners">
         <a v-bind:href="getSilkUrl(runner.id_race)" class="runners-item__cell" v-show="runner.silk">
-          <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk"/>
+          <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk" width="20" height="20"/>
         </a>
         <span class="runners-item__cell" v-text="runner.name"></span>
-        <span class="runners-item__cell -right">
-          <button type="button" class="item-cell__btn" v-text="runner.odds" @click="onOddsClick()"></button>
-        </span>
+        <button type="button" class="runners-item__btn -right" v-text="runner.odds" @click="onOddsClick()"></button>
       </li>
     </ul>
   </div>
@@ -119,10 +114,11 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-  primary_color = #333333
+  primary_color = #333
   bg_color = #FFF
   text_color = #444
   alt_text_color = #FFF
+  alt_border_color = #d9d9d9
 
   .race-block
     font-weight normal
@@ -131,16 +127,19 @@
     border-radius 3px
     background-color bg_color
     font-family Tahoma, Geneva, Kalimati, sans-serif
+    box-sizing border-box
     &__title
       background-color primary_color
       color alt_text_color
-      padding 8px
+      padding 7px 8px 4px 8px
       font-size 11px
 
     .title
       &__info
         &.-heavy
           font-weight bold
+        &.-top
+          vertical-align top
         &.-right
           float right
 
@@ -148,10 +147,13 @@
       padding 4px 8px 8px 8px
       background-color primary_color
       color alt_text_color
+      //*border-top 1px solid #666
 
     .subtitle
       &__info
         font-size 11px
+        border-top 1px solid #666
+        padding-top 8px
       &__race-type
         background white
         height 16px
@@ -170,6 +172,7 @@
 
     &__runners
       background-color bg_color
+      border 3px solid primary_color
       color text_color
       overflow-y auto
       margin 0
@@ -181,15 +184,31 @@
           margin 0
           padding 8px 4px
           font-size 11px
-          border-top 1px solid text_color
+          border-top 1px solid alt_border_color
+          &:first-of-type
+            border-color #FFF
 
           .runners-item
             &__cell
               display inline-block
+              vertical-align middle
+              line-height 11px
+              padding 3px
+              //.item-cell
+            &__btn
+              color text_color
+              background-color #f8ae17
+              background-image: linear-gradient(#ffdd86,#f8ae17)
+              border 1px solid #f8ae17
+              border-radius 3px
+              outline none
+              font-weight 400
+              min-width 36px
+              box-sizing border-box
+              cursor pointer
+              padding 2px 0
+              display inline-block
+              line-height 11px
               &.-right
                 float right
-              .item-cell
-                &__btn
-                  color: red
-
 </style>
