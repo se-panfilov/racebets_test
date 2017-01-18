@@ -13,7 +13,11 @@
         <span v-text="nextRace.distance"></span>m |
         <span v-text="nextRace.purse.amount"></span>
         <span v-text="nextRace.purse.currency"></span>
-        <span class="subtitle__race-type -right" v-bind:class="raceTypeClassObj"></span>
+        <!--<span  v-bind:class="raceTypeClassObj"></span>-->
+        <img v-bind:src="getRaceTypeImg(nextRace.race_type)"
+             class="subtitle__race-type -right"
+             height="16"
+             width="27"/>
       </div>
     </div>
     <ul class="race-block__runners">
@@ -64,6 +68,10 @@
       getSilkImg (img) {
         if (!img) return ''
         return `static/assets/silks/${img}`
+      },
+      getRaceTypeImg (type) {
+        if (!type) return ''
+        return `static/assets/race-types/race-type-${type}.svg`
       },
       getFlagImg (country) {
         if (!country) return ''
@@ -162,7 +170,6 @@
         border-top 1px solid #666
         padding-top 8px
       &__race-type
-        background white
         height 16px
         width 27px
         margin-top -2px
