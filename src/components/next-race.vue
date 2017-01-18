@@ -13,21 +13,20 @@
         <span v-text="nextRace.distance"></span>m |
         <span v-text="nextRace.purse.amount"></span>
         <span v-text="nextRace.purse.currency"></span>
-        <!--<img v-bind:src="getRaceTypeImg(nextRace.race_type)"/>-->
         <span class="subtitle__race-type -right" v-bind:class="raceTypeClassObj"></span>
       </div>
     </div>
     <ul class="race-block__runners">
       <li class="runners__item" v-for="runner in nextRace.runners">
-        <a v-bind:href="getSilkUrl(runner.id_race)"
-           class="runners-item__cell -order1"
-           v-show="runner.silk"
-        >
-          <img v-bind:src="getSilkImg(runner.silk)" v-bind:alt="runner.silk" width="20" height="20"/>
-        </a>
+        <span class="runners-item__cell -order1" v-show="runner.silk">
+          <img v-bind:src="getSilkImg(runner.silk)" width="20" height="20"/>
+        </span>
         <span class="runners-item__cell -order2" v-text="runner.name"></span>
         <span class="runners-item__cell -order3">
-          <button type="button" class="item-cell__btn" v-text="runner.odds" @click="onOddsClick()"></button>
+          <a v-bind:href="getOddUrl(nextRace.id_race)"
+             class="item-cell__btn"
+             v-text="runner.odds"
+          ></a>
         </span>
       </li>
     </ul>
@@ -41,7 +40,8 @@
     name: 'NextRace',
     data () {
       return {
-        races: NextRaceData.data.races
+        races: NextRaceData.data.races,
+        gbpToEurRate: 1
       }
     },
     props: {
@@ -51,20 +51,13 @@
       }
     },
     methods: {
-      debug () {
-//        console.info(this.races)
-//        console.log(this.selectedRaces)
-      },
-      onOddsClick () {
-
-      },
       getDue (dt) {
         const now = (new Date()).getTime()
 
         if (dt <= now) return 'Due'
         return parseInt((dt - now) / 1000 / 60)
       },
-      getSilkUrl (id) {
+      getOddUrl (id) {
         if (!id) return ''
         return `http://www.racebets.com/bet/${id}` // https?
       },
@@ -72,10 +65,6 @@
         if (!img) return ''
         return `static/assets/silks/${img}`
       },
-//      getRaceTypeImg (type) {
-//        if (!type) return ''
-//        return `static/assets/race-types/race-type-${type}.svg`
-//      },
       getFlagImg (country) {
         if (!country) return ''
         return `static/assets/flags/${country.toLowerCase()}.png`
@@ -162,6 +151,7 @@
         background white
         height 16px
         width 27px
+        margin-top -2px
         display inline-block
         &.-trot
           mask url('../../static/assets/race-types/race-type-T.svg') center / contain no-repeat
@@ -210,7 +200,11 @@
               &.-order3
                 order 3
                 flex 1 0 20%
+                padding 5px 0
               .item-cell__btn
+                display inline-block
+                text-align center
+                text-decoration none
                 color text_color
                 background-color #f8ae17
                 background-image: linear-gradient(#ffdd86, #f8ae17)
@@ -222,5 +216,5 @@
                 box-sizing border-box
                 cursor pointer
                 padding 2px 0
-                  line-height 11px
+                line-height 11px
 </style>
