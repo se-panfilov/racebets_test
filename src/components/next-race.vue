@@ -1,5 +1,5 @@
 <template>
-  <div class='race-block'>
+  <div class='race-block' v-bind:class="{'-hide': isNothingSelected}">
     <div class="race-block__title">
       <span class="title__info">
         <img v-bind:src="getFlagImg(nextRace.event.country)" width="14" height="11">
@@ -41,7 +41,7 @@
     data () {
       return {
         races: NextRaceData.data.races,
-        gbpToEurRate: 1
+        gbpToEurRate: 1.15
       }
     },
     props: {
@@ -68,9 +68,16 @@
       getFlagImg (country) {
         if (!country) return ''
         return `static/assets/flags/${country.toLowerCase()}.png`
+      },
+      toEur (val, currency) {
+        if (currency === 'EUR') return val
+        return val * this.gbpToEurRate
       }
     },
     computed: {
+      isNothingSelected () {
+        return Object.keys(this.filterObj).filter(v => this.filterObj[v]).length === 0
+      },
       selectedRaces () {
         const arr = this.races
         const filters = Object.keys(this.filterObj).filter(v => {
@@ -85,7 +92,12 @@
         const emptyRace = { purse: {}, event: {}, runners: {}, race_type: 'T', post_time: 0 }
 
         if (!this.selectedRaces) return emptyRace
-        const sortedRaces = this.selectedRaces.sort((a, b) => a.purse.amount - b.purse.amount)
+        const sortedRaces = this.selectedRaces.sort((a, b) => {
+          const valA = this.toEur(a.purse.amount, a.purse.currency)
+          const valB = this.toEur(b.purse.amount, b.purse.currency)
+
+          return valA - valB
+        })
         return sortedRaces.length > 0 ? sortedRaces[0] : emptyRace
       },
       runnersCount () {
@@ -127,6 +139,8 @@
       color alt_text_color
       padding 7px 8px 4px 8px
       font-size 11px
+    &.-hide
+      display none
 
     .title
       &__info
